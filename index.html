@@ -52,7 +52,10 @@ button,select,input{font:inherit;color:inherit}
 /* ---------- bara de proiect ---------- */
 .top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--panel);border-bottom:1px solid var(--line)}
 .top-in{max-width:1480px;margin:0 auto;padding-inline:16px;display:flex;align-items:center;gap:18px;min-height:56px;flex-wrap:wrap}
-.brand{display:flex;align-items:baseline;gap:10px;min-width:0}
+.brand{display:flex;align-items:baseline;gap:10px;min-width:0;color:var(--fg);text-decoration:none}
+.home{display:grid;place-items:center;width:38px;height:38px;border:1px solid var(--line);border-radius:var(--r);color:var(--fg);background:var(--panel);margin-right:-6px;flex:none}
+.home:hover{border-color:var(--accent);color:var(--accent)}
+.home[aria-current="page"]{background:var(--accent-soft);border-color:var(--accent);color:var(--accent)}
 .brand b{font-family:var(--f-display);font-size:22px;font-weight:700;letter-spacing:.02em}
 .brand span{font-size:13px;color:var(--mute);white-space:nowrap}
 nav.tabs{display:flex;gap:2px;margin-left:auto;flex-wrap:wrap}
@@ -128,7 +131,7 @@ main{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:22px 60px}
 .bh-mobile{display:none;gap:8px;align-items:center}
 .bh-mobile select{flex:1;padding:8px;border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
 @media (max-width:900px){.bh-layout{grid-template-columns:1fr}.bh-side{display:none}.bh-mobile{display:flex}.nav-btns{display:none}}
-@media (max-width:640px){nav.tabs{margin-left:0;flex-wrap:nowrap;overflow-x:auto;width:100%}nav.tabs a{padding:8px 10px 9px;white-space:nowrap}.top-in{gap:0;padding-block:8px 0}}
+@media (max-width:640px){.brand span{display:none}.home{width:34px;height:34px;margin-right:10px}nav.tabs{margin-left:0;flex-wrap:nowrap;overflow-x:auto;width:100%}nav.tabs a{padding:8px 10px 9px;white-space:nowrap}.top-in{gap:0;padding-block:8px 0}}
 
 .bh-head{display:flex;align-items:flex-end;gap:16px;flex-wrap:wrap}
 .bh-head h1{font-size:clamp(40px,6vw,64px)}
@@ -202,7 +205,8 @@ footer{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:0 30px;c
 <body>
 <header class="top">
   <div class="top-in">
-    <div class="brand"><b>Peștera 2 · Laborator</b><span>BBCGEOTECHNIC</span></div>
+    <a class="home" href="#sinteza" aria-label="Acasă: pagina de sinteză" title="Acasă"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M3 11.2 12 4l9 7.2" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M5.5 9.5V20h5v-5.5h3V20h5V9.5" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/></svg></a>
+    <a class="brand" href="#sinteza"><b>Peștera 2 · Laborator</b><span>BBCGEOTECHNIC</span></a>
     <nav class="tabs" aria-label="Secțiuni">
       <a href="#sinteza" data-view="sinteza">Sinteză</a>
       <a href="#foraje" data-view="foraje">Foraje</a>
@@ -990,6 +994,7 @@ function route(){
   if (h.startsWith("f-")){ const b = bhOfKey(h.slice(2)); if (b && b !== bs.bh){ bs.bh = b; if (!byBh[b].find(s => s.rep === bs.rep)) bs.rep = null; } }
   document.querySelectorAll(".view").forEach(s => s.hidden = s.id !== "v-" + v);
   document.querySelectorAll("nav.tabs a").forEach(a => a.setAttribute("aria-current", a.dataset.view === v ? "page" : "false"));
+  $(".home").setAttribute("aria-current", v === "sinteza" ? "page" : "false");
   const changed = view !== v; view = v;
   requestAnimationFrame(() => { if (v === "sinteza") renderOverview(); else if (v === "foraje") renderBh(true); else if (v === "np122") renderNp(); else renderDate(); });
   if (changed) window.scrollTo(0, 0);
