@@ -19,20 +19,20 @@
   --f-display:"Barlow Condensed","Arial Narrow",Arial,sans-serif;
   --f-body:"Source Sans 3","Segoe UI",system-ui,sans-serif;
   --f-mono:"JetBrains Mono",ui-monospace,Consolas,monospace;
-  --r:6px;
+  --r:6px; --tz-op:.42;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#101518; --panel:#172024; --sunk:#131B1E; --fg:#E5E8E3; --mute:#98A4A7; --line:#2A353A; --grid:#222C30;
   --accent:#D9A441; --accent-soft:#3A2E17; --accent-ink:#1A1405;
   --c1:#C9803F; --c2:#4A97E0; --c3:#67A035; --c4:#C762B0;
   --warn:#E09A3E; --warn-soft:#3A2A14; --crit:#F0705F; --ok:#6CBF6F;
-  --water:#4A97E0; --soil:#A9864F; --soil-dark:#D2B07A; color-scheme:dark}}
+  --water:#4A97E0; --soil:#A9864F; --soil-dark:#D2B07A; --tz-op:.16; color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#101518; --panel:#172024; --sunk:#131B1E; --fg:#E5E8E3; --mute:#98A4A7; --line:#2A353A; --grid:#222C30;
   --accent:#D9A441; --accent-soft:#3A2E17; --accent-ink:#1A1405;
   --c1:#C9803F; --c2:#4A97E0; --c3:#67A035; --c4:#C762B0;
   --warn:#E09A3E; --warn-soft:#3A2A14; --crit:#F0705F; --ok:#6CBF6F;
-  --water:#4A97E0; --soil:#A9864F; --soil-dark:#D2B07A; color-scheme:dark}
+  --water:#4A97E0; --soil:#A9864F; --soil-dark:#D2B07A; --tz-op:.16; color-scheme:dark}
 
 *{box-sizing:border-box}
 [hidden]{display:none!important}
@@ -80,12 +80,12 @@ main{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:22px 60px}
 /* ---------- antet sinteză ---------- */
 .hero{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:24px;align-items:end}
 .hero p{margin:8px 0 0;max-width:62ch}
-.kpis{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
+.kpis{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border:1px solid var(--line);border-radius:var(--r);background:var(--panel)}
 .kpi{padding:12px 14px;border-left:1px solid var(--line)}
-.kpi:first-child{border-left:0}
+.kpi:nth-child(3n+1){border-left:0}.kpi:nth-child(n+4){border-top:1px solid var(--line)}
 .kpi b{display:block;font-family:var(--f-display);font-size:34px;font-weight:600;line-height:1;font-variant-numeric:tabular-nums}
 .kpi span{font-size:12.5px;color:var(--mute)}
-@media (max-width:900px){.hero{grid-template-columns:1fr}.kpis{grid-template-columns:repeat(3,minmax(0,1fr))}.kpi:nth-child(4){border-left:0}.kpi:nth-child(n+4){border-top:1px solid var(--line)}}
+@media (max-width:900px){.hero{grid-template-columns:1fr}}
 
 .chips{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
 .chip{border:1px solid var(--line);background:var(--panel);border-radius:999px;padding:4px 11px;font-size:13.5px;cursor:pointer;display:inline-flex;gap:6px;align-items:center}
@@ -95,11 +95,24 @@ main{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:22px 60px}
 .tag.warn{background:var(--warn-soft);color:var(--warn)}
 .tag.acc{background:var(--accent-soft);color:var(--accent)}
 
-.flags{display:flex;flex-direction:column;gap:0;margin:0;padding:0;list-style:none}
-.flags li{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:10px;align-items:start;padding:9px 0;border-top:1px solid var(--line);font-size:14px}
-.flags li:first-child{border-top:0}
-.flags .ico{width:18px;height:18px;border-radius:50%;background:var(--warn-soft);color:var(--warn);display:grid;place-items:center;font-weight:700;font-size:12px;margin-top:1px}
-.linkbtn{background:none;border:0;padding:0;color:var(--accent);cursor:pointer;font-weight:600;text-decoration:underline;text-underline-offset:2px}
+/* ---------- diagrama ternară NP 074 ---------- */
+.tern-wrap{position:relative}
+.tern-wrap svg{width:100%;height:auto;display:block;touch-action:manipulation}
+.tz{fill-opacity:var(--tz-op);stroke:var(--line);stroke-width:.8}
+.tb{stroke:var(--fg);stroke-width:1.4;opacity:.75}
+.tg{stroke:var(--grid);stroke-width:.8;stroke-dasharray:3 4}
+.tt{font-family:var(--f-mono);font-size:11px;fill:var(--mute)}
+.tl{font-family:var(--f-display);font-weight:600;fill:var(--fg);opacity:.8;pointer-events:none}
+.tip{font-family:var(--f-body);font-style:italic;font-size:10.5px;fill:var(--mute);pointer-events:none}
+.tax{font-family:var(--f-display);font-weight:700;font-size:17px;letter-spacing:.08em;fill:var(--fg)}
+.tax tspan.u{font-family:var(--f-mono);font-weight:400;font-size:10.5px;letter-spacing:0;fill:var(--mute)}
+.tp{cursor:pointer;stroke:var(--panel);stroke-width:1.6;transition:transform .9s cubic-bezier(.2,.8,.2,1),r .15s}
+.tp:hover,.tp.hl{r:9;stroke:var(--fg);stroke-width:2}
+.tread{font-family:var(--f-mono);font-size:12px;fill:var(--fg)}
+.ttip{position:absolute;pointer-events:none;background:var(--panel);border:1px solid var(--line);border-radius:var(--r);padding:6px 9px;font-size:13px;box-shadow:0 4px 14px rgba(0,0,0,.12);opacity:0;transition:opacity .12s;white-space:nowrap;z-index:3}
+.ttip.on{opacity:1}
+.np074{margin:12px 0 0;padding:10px 12px;border-left:3px solid var(--accent);background:var(--sunk);border-radius:0 var(--r) var(--r) 0;font-size:14.5px}
+.np074 .eyebrow{font-size:11.5px;color:var(--accent);margin-bottom:2px}
 
 /* ---------- foraje ---------- */
 .bh-layout{display:grid;grid-template-columns:250px minmax(0,1fr);gap:18px;align-items:start}
@@ -223,8 +236,9 @@ footer{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:0 30px;c
         <div id="p-casa" class="plot tall"></div>
       </div>
       <div class="panel">
-        <div class="panel-h"><h3>Diagrama ternară</h3><p>argilă · praf · nisip (fără pietriș, normalizat la 100 %)</p></div>
-        <div id="p-tern" class="plot tall"></div>
+        <div class="panel-h"><h3>Diagrama ternară NP 074-2022</h3><button class="btn" id="tern-zoom">Mărește zona probelor</button></div>
+        <div class="tern-wrap" id="tern"></div>
+        <p class="note">Fracțiunile se recalculează la 100 % fără pietriș și bolovăniș. Treci cu mouse-ul peste diagramă pentru a citi compoziția și clasa.</p>
       </div>
     </div>
 
@@ -233,17 +247,12 @@ footer{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:0 30px;c
       <div class="grid g3" id="depth-grid"></div>
     </div>
 
-    <div class="grid g2">
-      <div class="panel">
-        <div class="panel-h"><h3>Distribuții</h3><p>număr de probe</p></div>
-        <div class="grid g2" style="gap:8px">
-          <div id="p-dist1" class="plot sm"></div>
-          <div id="p-dist2" class="plot sm"></div>
-        </div>
-      </div>
-      <div class="panel">
-        <div class="panel-h"><h3>De verificat</h3><p>neconcordanțe detectate automat între surse</p></div>
-        <ul class="flags" id="flags"></ul>
+    <div class="panel">
+      <div class="panel-h"><h3>Distribuții</h3><p>număr de probe</p></div>
+      <div class="grid g3" style="gap:8px">
+        <div id="p-dist0" class="plot sm"></div>
+        <div id="p-dist1" class="plot sm"></div>
+        <div id="p-dist2" class="plot sm"></div>
       </div>
     </div>
   </section>
@@ -273,7 +282,7 @@ footer{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:0 30px;c
           <div class="panel column">
             <div class="panel-h"><h3>Coloana probelor</h3></div>
             <div id="bh-col"></div>
-            <p class="note">Clic pe o probă pentru fișa ei. Culoarea = clasificarea după diagrama ternară.</p>
+            <p class="note">Clic pe o probă pentru fișa ei. Culoarea = clasa din diagrama ternară NP 074-2022.</p>
           </div>
           <div class="panel" id="fisa"></div>
         </div>
@@ -319,7 +328,7 @@ footer{max-width:1480px;margin:0 auto;padding-inline:16px;padding-block:0 30px;c
         <div class="ctl"><label for="np-group">Grupare pe unități</label>
           <select id="np-group">
             <option value="all">Toate probele (o unitate)</option>
-            <option value="tern">Clasificare ternară NP 074-2022</option>
+            <option value="np074">Diagrama ternară NP 074-2022</option>
             <option value="code">SR EN ISO 14688-2:2018</option>
             <option value="cons">Stare de consistență</option>
             <option value="zone">Interval de adâncime</option>
@@ -402,7 +411,7 @@ function toast(m){const t=$("#toast");t.textContent=m;t.classList.add("on");clea
 /* ---------- normalizare ---------- */
 const LOTS = ["Iulie 2026", "August 2026", "Septembrie 2026 (UL)"];
 const LOTS_S = {"Iulie 2026":"Iulie", "August 2026":"August", "Septembrie 2026 (UL)":"Septembrie (UL)"};
-const CLASSES = ["Argilă prăfoasă", "Praf argilos", "Argilă grasă", "Pământ cu pietriș"];
+const CLASSES = ["Argilă prăfoasă", "Praf argilos", "Argilă", "Argilă grasă", "Praf nisipos"];
 S.forEach(s => {
   s.code = ((s.t18 || "").match(/\(([A-Za-z.]+)\)\s*$/) || [])[1] || (s.t18 && s.t18.startsWith("PIETRIS") ? "Gr" : (s.t18 && s.t18.startsWith("PRAF") ? "SiL–ClL" : "–"));
   s.key = s.bh.replace(/\s+/g, "");
@@ -411,7 +420,7 @@ S.forEach(s => {
   s.tipC = norm(s.tip); s.tipF = norm(s.tip_pdf) || s.tipC;
   s.zj = s.z + (((s.rep * 9301 + 49297) % 233280) / 233280 - .5) * .24;  // decalaj determinist
 });
-const clsColor = c => { const t = T(); const i = CLASSES.indexOf(c); return i < 0 ? t.mute : t.c[[0, 2, 3, 1][i]]; };
+const clsColor = c => { const t = T(); const i = CLASSES.indexOf(c); return i < 0 || i > 3 ? t.mute : t.c[[0, 2, 1, 3][i]]; };
 const lotColor = l => T().c[LOTS.indexOf(l)] || T().mute;
 
 const bhKeyOrder = b => { const m = b.match(/^([A-Z]+)\s*(\d+)([A-Z]*)$/i); return m ? [m[1], +m[2], m[3]] : [b, 0, ""]; };
@@ -475,6 +484,118 @@ const draw = (el, data, layout) => Plotly.react(el, data, layout, CFG);
 /* ---------- miez stratigrafic în antet ---------- */
 function renderCore(){ $("#core").innerHTML = [...S].sort((a, b) => a.rep - b.rep).map(s => `<i style="background:${clsColor(s.cls)}" title="${esc(s.bh)} ${esc(s.prb)}"></i>`).join(""); }
 
+
+/* =================== DIAGRAMA TERNARĂ NP 074-2022 =================== */
+// zone în coordonate (argilă %, praf %); nisip = 100 − argilă − praf
+const TZ = [
+  {n:"Argilă grasă", ip:"IP > 35", c:"#E58FA6", v:[[50,0],[100,0],[50,50]], lp:[66,17]},
+  {n:"Nisip", ip:"IP = 0", c:"#7FBF73", v:[[0,0],[0,15],[15,0]], lp:[4.2,5]},
+  {n:"Nisip prăfos", ip:"IP = 0…10", c:"#E9A971", v:[[0,15],[0,60],[10,55],[10,5]], lp:[4.4,35]},
+  {n:"Praf nisipos", ip:"IP = 0…10", c:"#B48CD6", v:[[0,60],[0,80],[10,70],[10,55]], lp:[4.4,67]},
+  {n:"Praf", ip:"IP = 5…15", c:"#E88AA0", v:[[0,80],[0,100],[10,90],[10,70]], lp:[3.4,87]},
+  {n:"Nisip argilos", ip:"IP = 5…20", c:"#E8946C", v:[[10,5],[10,55],[25,47.5],[25,0],[15,0]], lp:[17,24]},
+  {n:"Praf nisipos argilos", ip:"IP = 5…20", c:"#E0CF4A", v:[[10,55],[10,70],[25,55],[25,47.5]], lp:[16.5,57], br:["Praf nisipos", "argilos"]},
+  {n:"Praf argilos", ip:"IP = 10…25", c:"#E8B84A", v:[[10,70],[10,90],[25,75],[25,55]], lp:[16.5,74]},
+  {n:"Argilă nisipoasă", ip:"IP = 15…35", c:"#8CC37F", v:[[25,0],[25,45],[30,50],[50,30],[50,0]], lp:[37,16], br:["Argilă", "nisipoasă"]},
+  {n:"Argilă prăfoasă", ip:"IP = 15…35", c:"#E9B27A", v:[[25,55],[25,75],[40,60],[30,50]], lp:[31,61], br:["Argilă", "prăfoasă"]},
+  {n:"Argilă", ip:"IP = 25…50", c:"#D9CF6A", v:[[30,50],[40,60],[50,50],[50,30]], lp:[42,46]},
+  {n:"Argilă prăfoasă nisipoasă", ip:"IP = 15…25", c:"#C9B98A", v:[[25,45],[25,55],[30,50]], lp:[26.6,50], ast:true},
+];
+const TB = [[[15,0],[0,15]],[[10,90],[10,5]],[[25,75],[25,0]],[[0,80],[50,30]],[[0,60],[25,47.5]],[[40,60],[25,45]]];
+function np074Class(c, si, n){
+  if (c >= 50) return "Argilă grasă";
+  const lv = si < 60 - c / 2;
+  if (c < 10){ if (n >= 85) return "Nisip"; if (lv) return "Nisip prăfos"; if (n >= 20) return "Praf nisipos"; return "Praf"; }
+  if (c < 25){ if (lv) return "Nisip argilos"; if (n >= 20) return "Praf nisipos argilos"; return "Praf argilos"; }
+  const ld = si < c + 20;
+  if (n >= 20 && ld) return "Argilă nisipoasă"; if (n >= 20 && !ld) return "Argilă prăfoasă nisipoasă";
+  if (n < 20 && !ld) return "Argilă prăfoasă"; return "Argilă";
+}
+function fines(s){ // NP 074: fracțiunea fină recalculată la 100 % fără pietriș/bolovăniș
+  const f = (s.A || 0) + (s.P || 0) + (s.N || 0); if (!f) return null;
+  return {c:s.A / f * 100, s:s.P / f * 100, n:s.N / f * 100};
+}
+S.forEach(s => { const f = fines(s); s.f = f; s.np074 = f ? np074Class(f.c, f.s, f.n) : "–"; if (f) s.cls = s.np074; });
+const plastClass = ip => ip == null ? null : ip <= 10 ? "redusă" : ip <= 20 ? "mijlocie" : ip <= 35 ? "mare" : "foarte mare";
+function np074Desc(s){
+  if (!s.f) return "Fără analiză granulometrică.";
+  const z = TZ.find(t => t.n === s.np074), ip = pc(s.IP), ic = s.IC;
+  const parts = [`<b>${esc(s.np074)}</b>${s.obs ? ", " + esc(s.obs.replace(/inchis/g, "închis")) : ""}`];
+  if (s.cons) parts.push(`${esc(s.cons)} (IC = ${fmt(ic, 2)})`);
+  if (ip != null) parts.push(`plasticitate ${plastClass(ip)} (IP = ${fmt(ip, 1)} %)`);
+  let t = parts.join(", ") + ".";
+  t += `<br><span class="muted" style="font-size:13px">Compoziție fracțiune fină: argilă ${fmt(s.f.c, 1)} % · praf ${fmt(s.f.s, 1)} % · nisip ${fmt(s.f.n, 1)} %${s.Pi ? ` · pietriș ${fmt(pc(s.Pi), 0)} % din total (recalculat)` : ""} · domeniul tipic al zonei: ${z ? z.ip : "–"}</span>`;
+  return t;
+}
+const TSIDE = 700, TPAD = 80, TH = TSIDE * Math.sqrt(3) / 2, TVB = [0, 0, 860, 720];
+const tXY = (c, si) => [TPAD + (si / 100 + c / 200) * TSIDE, TPAD + TH - c / 100 * TH];
+const tem = { vb:TVB.slice(), zoomed:false };
+function renderTernary(box, SS, anim){
+  const P = pts => pts.map(([c, si]) => tXY(c, si).map(v => v.toFixed(1)).join(",")).join(" ");
+  let g = `<svg viewBox="${tem.vb.join(" ")}" role="img" aria-label="Diagrama ternară NP 074-2022 cu ${SS.length} probe"><defs><marker id="tah" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto"><polygon points="0 0,8 3,0 6" style="fill:var(--fg)"/></marker></defs>`;
+  for (let v = 10; v < 100; v += 10){
+    [[tXY(v, 0), tXY(v, 100 - v)], [tXY(0, v), tXY(100 - v, v)], [tXY(0, 100 - v), tXY(100 - v, 0)]].forEach(([a, b]) => g += `<line class="tg" x1="${a[0]}" y1="${a[1]}" x2="${b[0]}" y2="${b[1]}"/>`);
+  }
+  TZ.forEach(z => { g += `<polygon class="tz" points="${P(z.v)}" style="fill:${z.c}"><title>${z.n} · ${z.ip}</title></polygon>`; });
+  TB.forEach(([a, b]) => { const p = tXY(...a), q = tXY(...b); g += `<line class="tb" x1="${p[0]}" y1="${p[1]}" x2="${q[0]}" y2="${q[1]}"/>`; });
+  g += `<polygon points="${P([[0,0],[0,100],[100,0]])}" style="fill:none;stroke:var(--fg);stroke-width:2"/>`;
+  TZ.forEach(z => { const [x, y] = tXY(...z.lp);
+    if (z.ast){ g += `<text class="tl" x="${x}" y="${y + 5}" text-anchor="middle" font-size="16">*</text>`; return; }
+    const lines = z.br || [z.n], fs = z.lp[0] < 6 ? 12 : 15;
+    lines.forEach((l, i) => g += `<text class="tl" x="${x}" y="${y - (lines.length - 1) * 8 + i * 16}" text-anchor="middle" font-size="${fs}">${l}</text>`);
+    g += `<text class="tip" x="${x}" y="${y + (lines.length - 1) * 8 + 15}" text-anchor="middle">${z.ip}</text>`; });
+  for (let n = 10; n < 100; n += 10){
+    let [x, y] = tXY(100 - n, 0); g += `<text class="tt" x="${x - 10}" y="${y + 4}" text-anchor="end">${n}</text>`;
+    [x, y] = tXY(0, n); g += `<text class="tt" x="${x}" y="${y + 18}" text-anchor="middle">${n}</text>`;
+    [x, y] = tXY(n, 100 - n); g += `<text class="tt" x="${x + 10}" y="${y + 4}">${n}</text>`;
+  }
+  const O = 40; let a, b, xm, ym;
+  a = tXY(80, 0); b = tXY(20, 0); xm = (a[0] + b[0]) / 2 - O - 10; ym = (a[1] + b[1]) / 2;
+  g += `<text class="tax" x="${xm}" y="${ym}" text-anchor="middle" transform="rotate(-60,${xm},${ym})">NISIP <tspan class="u">0,063…2 mm</tspan></text>`;
+  a = tXY(70, 0); b = tXY(30, 0); g += `<line x1="${a[0] - O}" y1="${a[1]}" x2="${b[0] - O}" y2="${b[1]}" style="stroke:var(--fg);stroke-width:1.4" marker-end="url(#tah)"/>`;
+  a = tXY(20, 80); b = tXY(80, 20); xm = (a[0] + b[0]) / 2 + O + 10; ym = (a[1] + b[1]) / 2;
+  g += `<text class="tax" x="${xm}" y="${ym}" text-anchor="middle" transform="rotate(60,${xm},${ym})">ARGILĂ <tspan class="u">&lt; 0,002 mm</tspan></text>`;
+  a = tXY(30, 70); b = tXY(70, 30); g += `<line x1="${a[0] + O}" y1="${a[1]}" x2="${b[0] + O}" y2="${b[1]}" style="stroke:var(--fg);stroke-width:1.4" marker-end="url(#tah)"/>`;
+  xm = TPAD + TSIDE / 2; ym = TPAD + TH + 50;
+  g += `<text class="tax" x="${xm}" y="${ym}" text-anchor="middle">PRAF <tspan class="u">0,002…0,063 mm</tspan></text>`;
+  a = tXY(0, 30); b = tXY(0, 70); g += `<line x1="${a[0]}" y1="${a[1] + O}" x2="${b[0]}" y2="${b[1] + O}" style="stroke:var(--fg);stroke-width:1.4" marker-end="url(#tah)"/>`;
+  g += `<text class="tt" x="${TPAD + TSIDE * .6}" y="${TPAD + TH + 80}">* argilă prăfoasă nisipoasă, IP = 15…25</text>`;
+  g += `<text class="tread" id="tread" x="${TPAD}" y="${TPAD - 40}"></text>`;
+  // puncte: pornesc din centrul de greutate al norului și „cad” la poziție
+  const pts = SS.filter(s => s.f);
+  const cxy = pts.length ? [mean(pts.map(s => tXY(s.f.c, s.f.s)[0])), mean(pts.map(s => tXY(s.f.c, s.f.s)[1]))] : [430, 400];
+  g += `<g id="tpts">` + pts.map((s, i) => { const [x, y] = tXY(s.f.c, s.f.s);
+    const tr = anim && !RM ? `transform:translate(${(cxy[0] - x).toFixed(1)}px,${(TPAD - 60 - y).toFixed(1)}px);transition-delay:${(i * 5)}ms` : "";
+    return `<circle class="tp" data-rep="${s.rep}" cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="6.5" style="fill:${clsColor(s.cls)};${tr}"/>`; }).join("") + `</g></svg><div class="ttip" id="ttip"></div>`;
+  box.innerHTML = g;
+  if (anim && !RM) requestAnimationFrame(() => requestAnimationFrame(() => box.querySelectorAll(".tp").forEach(c => c.style.transform = "")));
+  const svg = box.querySelector("svg"), tip = box.querySelector("#ttip"), rd = box.querySelector("#tread");
+  const toData = e => { const r = svg.getBoundingClientRect(), vb = tem.vb; const mx = vb[0] + (e.clientX - r.left) / r.width * vb[2], my = vb[1] + (e.clientY - r.top) / r.height * vb[3];
+    const c = (TPAD + TH - my) / TH * 100, si = ((mx - TPAD) / TSIDE - c / 200) * 100; return [c, si, 100 - c - si]; };
+  svg.onmousemove = e => {
+    const [c, si, n] = toData(e);
+    rd.textContent = (c < -1 || si < -1 || n < -1) ? "" : `A ${fmt(Math.max(0, c), 1)} · P ${fmt(Math.max(0, si), 1)} · N ${fmt(Math.max(0, n), 1)} → ${np074Class(c, si, n)}`;
+    const el = e.target.closest(".tp");
+    if (el){ const s = S.find(x => x.rep === +el.dataset.rep), br = box.getBoundingClientRect();
+      tip.innerHTML = `<b>${esc(s.bh)} · ${esc(s.prb)} · ${fmt(s.z, 1)} m</b><br>A ${fmt(s.f.c, 1)} · P ${fmt(s.f.s, 1)} · N ${fmt(s.f.n, 1)} %<br><span class="muted">${esc(s.np074)} · raport ${s.rep}</span>`;
+      const x = e.clientX - br.left, y = e.clientY - br.top; tip.style.left = Math.min(x + 14, br.width - 210) + "px"; tip.style.top = (y + 14) + "px"; tip.classList.add("on");
+    } else tip.classList.remove("on");
+  };
+  svg.onmouseleave = () => { tip.classList.remove("on"); rd.textContent = ""; };
+  svg.onclick = e => { const el = e.target.closest(".tp"); if (el) openSample(el.dataset.rep); };
+}
+function ternZoom(){
+  const pts = ovSamples().filter(s => s.f).map(s => tXY(s.f.c, s.f.s));
+  let to = TVB.slice();
+  if (!tem.zoomed && pts.length){ const xs = pts.map(p => p[0]), ys = pts.map(p => p[1]);
+    let x0 = Math.min(...xs) - 70, x1 = Math.max(...xs) + 70, y0 = Math.min(...ys) - 70, y1 = Math.max(...ys) + 70;
+    const w = Math.max(x1 - x0, (y1 - y0) * 860 / 720), h = w * 720 / 860, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2; to = [cx - w / 2, cy - h / 2, w, h]; }
+  tem.zoomed = !tem.zoomed; $("#tern-zoom").textContent = tem.zoomed ? "Diagrama completă" : "Mărește zona probelor";
+  const from = tem.vb.slice(), svg = $("#tern svg"), t0 = performance.now(), D = RM ? 1 : 650;
+  const step = t => { const p = Math.min(1, (t - t0) / D), e = 1 - Math.pow(1 - p, 3); tem.vb = from.map((v, i) => v + (to[i] - v) * e); svg.setAttribute("viewBox", tem.vb.join(" ")); if (p < 1) requestAnimationFrame(step); };
+  requestAnimationFrame(step);
+}
+
 /* =================== SINTEZĂ =================== */
 const ov = {lots:new Set(LOTS), anim:true};
 function ovSamples(){ return S.filter(s => ov.lots.has(s.lot)); }
@@ -482,12 +603,11 @@ function renderOverview(){
   const m = D.meta;
   $("#h-eyebrow").textContent = `${m.laborator} · beneficiar ${m.beneficiar} · ${m.amplasament}`;
   $("#h-sub").textContent = `Actualizat ${m.generat} din „${m.sursa}” și din ${m.nfise} fișe de laborator. Forfecarea directă este preluată din buletinele PDF.`;
-  const k = [[S.length, "probe"], [BH.length, "foraje"], [S.filter(s => s.oed).length, "încercări edometrice"], [S.filter(s => s.shear).length, "forfecări directe"], [LOTS.length, "loturi"]];
+  const k = [[S.length, "probe"], [BH.length, "foraje"], [S.filter(s => s.A != null).length, "granulometrii"], [S.filter(s => s.wL != null).length, "limite de plasticitate"], [S.filter(s => s.oed).length, "încercări edometrice"], [S.filter(s => s.shear).length, "forfecări directe"]];
   $("#kpis").innerHTML = k.map(([v, l]) => `<div class="kpi"><b data-v="${v}">${v}</b><span>${l}</span></div>`).join("");
   if (!RM && ov.anim) document.querySelectorAll(".kpi b").forEach(b => { const v = +b.dataset.v, t0 = performance.now(); const f = t => { const p = Math.min(1, (t - t0) / 900); b.textContent = Math.round(v * (1 - Math.pow(1 - p, 3))); if (p < 1) requestAnimationFrame(f); }; requestAnimationFrame(f); });
   $("#ov-lots").innerHTML = LOTS.map(l => `<button class="chip" aria-pressed="${ov.lots.has(l)}" data-lot="${l}"><span class="sw" style="background:${lotColor(l)}"></span>${LOTS_S[l]} · ${S.filter(s => s.lot === l).length}</button>`).join("");
   renderOvCharts();
-  renderFlags();
 }
 function hoverS(){ return "<b>%{customdata[1]} · %{customdata[2]}</b> · %{customdata[3]} m<br>%{customdata[4]}<extra>raport %{customdata[0]}</extra>"; }
 const cd = s => [s.rep, s.bh, s.prb, fmt(s.z, 1), s.cls + " · " + s.code];
@@ -511,12 +631,7 @@ function renderOvCharts(){
     draw(el, [...refs, ...start], casaL).then(() => Plotly.animate(el, {data:casa, traces:casa.map((_, i) => i + 2)}, {transition:{duration:900, easing:"cubic-out"}, frame:{duration:900, redraw:false}}));
   } else draw(el, [...refs, ...casa], casaL);
 
-  // ternar
-  const tern = CLASSES.map(c => { const a = SS.filter(s => s.cls === c && s.A != null); const sum = s => (s.A + s.P + s.N) || 1;
-    return {type:"scatterternary", mode:"markers", name:c, a:a.map(s => s.A / sum(s) * 100), b:a.map(s => s.P / sum(s) * 100), c:a.map(s => s.N / sum(s) * 100), customdata:a.map(cd), hovertemplate:hoverS(),
-      marker:{size:8, color:clsColor(c), line:{width:1.2, color:t.panel}}}; }).filter(d => d.a.length);
-  const tax = {gridcolor:t.grid, linecolor:t.line, tickfont:{family:"JetBrains Mono", size:10, color:t.mute}, title:{font:{size:12.5, color:t.mute}}, ticksuffix:""};
-  draw($("#p-tern"), tern, L({xaxis:{visible:false}, yaxis:{visible:false}, ternary:{sum:100, bgcolor:"rgba(0,0,0,0)", aaxis:{...tax, title:{text:"Argilă %"}}, baxis:{...tax, title:{text:"Praf %"}}, caxis:{...tax, title:{text:"Nisip %"}}}, margin:{l:46, r:46, t:30, b:40}, legend:{orientation:"h", y:-0.08, yanchor:"top"}}));
+  renderTernary($("#tern"), SS, ov.anim);
 
   // profile pe adâncime
   const panels = [
@@ -554,28 +669,12 @@ function renderOvCharts(){
     textfont:{family:"JetBrains Mono", size:11, color:t.fg}, hovertemplate:"%{y}: %{x} probe<extra></extra>"}],
     layout:L({margin:{l:110, r:30, t:26, b:24}, title:{text:title, x:0, font:{size:13, color:t.mute}}, xaxis:{showgrid:false, showticklabels:false, showline:false, ticks:""}, yaxis:{autorange:"reversed", showline:false, ticks:"", tickfont:{family:"Source Sans 3", size:12.5, color:t.fg}}, bargap:.35})});
   const b1 = bar(codes, cnt(SS.map(s => s.code), codes), "SR EN ISO 14688-2:2018"), b2 = bar(cons, cnt(SS.map(s => s.cons), cons), "Stare de consistență");
+  const tz = [...new Set(SS.map(s => s.np074))].sort((a, b) => SS.filter(x => x.np074 === b).length - SS.filter(x => x.np074 === a).length);
+  const b0 = bar(tz, cnt(SS.map(s => s.np074), tz), "Diagrama ternară NP 074-2022"); draw($("#p-dist0"), b0.data, b0.layout);
   draw($("#p-dist1"), b1.data, b1.layout); draw($("#p-dist2"), b2.data, b2.layout);
 
-  ["#p-casa", "#p-tern", ...panels.map(p => "#" + p.id)].forEach(id => { const e = $(id); if (!e._clk){ e._clk = 1; e.on("plotly_click", ev => { const c = ev.points[0].customdata; if (c) openSample(c[0]); }); } });
+  ["#p-casa", ...panels.map(p => "#" + p.id)].forEach(id => { const e = $(id); if (!e._clk){ e._clk = 1; e.on("plotly_click", ev => { const c = ev.points[0].customdata; if (c) openSample(c[0]); }); } });
   ov.anim = false;
-}
-
-function findFlags(){
-  const F = [];
-  S.forEach(s => {
-    if (s.tip_pdf && s.tipC !== s.tipF) F.push({s, t:`Tipul încercării de forfecare: în centralizator „${s.tip || "nedefinit"}”, în buletinul PDF „${s.tip_pdf}”. Pagina folosește varianta din PDF.`});
-    if (s.shear && s.shear.some((p, i) => i && p[1] < s.shear[i - 1][1])) F.push({s, t:`Forfecare: τf scade la creșterea efortului (${s.shear.map(p => fmt(p[1], 1)).join(" / ")} kPa), ceea ce influențează φ și c.`});
-    if (s.gsat != null && s.gs != null && s.gsat > s.gs) F.push({s, t:`γsat = ${fmt(s.gsat)} kN/m³ depășește γs = ${fmt(s.gs)} kN/m³, valoare fizic imposibilă; de verificat γ, w sau volumul probei.`});
-    if (s.Sr != null && s.Sr > 1.02) F.push({s, t:`Sr = ${fmt(s.Sr)} > 1.`});
-    if (s.wL != null && s.wP != null && s.wP >= s.wL) F.push({s, t:"wP ≥ wL."});
-    if (s.M23n && s.M23i && s.M23i > s.M23n * 1.2) F.push({s, t:`M2-3 inundat (${fmt(s.M23i, 0)} kPa) mai mare decât M2-3 natural (${fmt(s.M23n, 0)} kPa).`});
-  });
-  return F;
-}
-function renderFlags(){
-  const F = findFlags();
-  $("#flags").innerHTML = F.length ? F.map(f => `<li><span class="ico">!</span><span><b>${esc(f.s.bh)} · ${esc(f.s.prb)}</b> <span class="muted">(raport ${f.s.rep})</span><br>${esc(f.t)}</span><button class="linkbtn" data-rep="${f.s.rep}">Deschide</button></li>`).join("")
-    : `<li><span></span><span class="muted">Nicio neconcordanță detectată.</span><span></span></li>`;
 }
 
 /* =================== FORAJE =================== */
@@ -628,7 +727,7 @@ let anim0 = true;
 
 function kv(title, rows){ const r = rows.filter(x => x[1] !== undefined); return `<div class="kv"><h4>${title}</h4><dl>${r.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join("")}</dl></div>`; }
 function renderFisa(){
-  const a = byBh[bs.bh], s = a.find(x => x.rep === bs.rep), F = findFlags().filter(f => f.s === s);
+  const a = byBh[bs.bh], s = a.find(x => x.rep === bs.rep);
   const P = (k, d) => fmt(val(s, PK[k]), d ?? PK[k].d);
   $("#fisa").innerHTML = `
     <div class="smp-tabs">${a.map(x => `<button class="chip" aria-pressed="${x.rep === s.rep}" data-rep="${x.rep}">${esc(x.prb)} · ${fmt(x.z, 1)} m</button>`).join("")}</div>
@@ -641,13 +740,13 @@ function renderFisa(){
       ${kv("Compresibilitate", [["M2-3 nat.", P("M23n") + " kPa"], ["M2-3 inund.", P("M23i") + " kPa"], ["im3", P("im3") + " cm/m"], ["pu", fmt(s.pu, 1) + " kPa"]])}
       ${kv("Forfecare directă", [["Încercare", esc(s.tipF || "–")], ["v", fmt(s.v, 1) + " mm/min"], ["φ", fmt(s.phi, 1) + "°"], ["c", fmt(s.c, 1) + " kPa"]])}
     </div>
+    <div class="np074"><div class="eyebrow">Descriere NP 074-2022</div>${np074Desc(s)}</div>
     <div class="cls">
       <span><b>SR EN ISO 14688-2:2018</b> · ${esc(s.t18 || "–")}</span>
       <span><b>SR EN ISO 14688-2:2005</b> · ${esc(s.t05 || "–")}</span>
       <span><b>USCS</b> · ${esc(s.uscs || "–")} · <b>Culoare</b> · ${esc(s.obs || "–")}</span>
       ${s.compr ? `<span><b>Compresibilitate</b> · ${esc(s.compr)}</span>` : ""}
     </div>
-    ${F.map(f => `<p class="note" style="color:var(--warn)">⚠ ${esc(f.t)}</p>`).join("")}
     <p class="note">* γs valoare estimată. Pe pagină w, wL, wP, IP, n și fracțiunile granulometrice sunt exprimate în procente.</p>`;
 }
 
@@ -767,7 +866,7 @@ function renderShear(s, anim){
 /* =================== NP 122 =================== */
 const np = {group:"all", lots:new Set(LOTS), z0:0, z1:6, unit:null, par:"IC", excl:new Set(), cond:"CU natural"};
 const GROUPERS = {
-  all: () => "Toate probele", tern: s => s.cls, code: s => s.code, cons: s => s.cons || "nedefinită", lot: s => LOTS_S[s.lot] || s.lot,
+  all: () => "Toate probele", np074: s => s.np074, code: s => s.code, cons: s => s.cons || "nedefinită", lot: s => LOTS_S[s.lot] || s.lot,
   zone: s => s.z <= 2 ? "z ≤ 2 m" : s.z <= 4 ? "2 < z ≤ 4 m" : "z > 4 m"};
 const npBase = () => S.filter(s => np.lots.has(s.lot) && s.z >= np.z0 && s.z <= np.z1);
 function npUnits(){ const g = GROUPERS[np.group], m = new Map(); npBase().forEach(s => { const k = g(s); if (!m.has(k)) m.set(k, []); m.get(k).push(s); }); return [...m.entries()].sort((a, b) => b[1].length - a[1].length); }
@@ -856,7 +955,7 @@ function npTSV(){
 
 /* =================== DATE =================== */
 const COLS = [
-  ["Identificare", [["rep", "Raport"], ["bh", "Foraj", "l"], ["prb", "Probă", "l"], ["z", "z (m)", 1], ["lot", "Lot", "l", s => LOTS_S[s.lot]], ["cls", "Clasificare ternară", "l"], ["code", "14688-2:2018", "l"]]],
+  ["Identificare", [["rep", "Raport"], ["bh", "Foraj", "l"], ["prb", "Probă", "l"], ["z", "z (m)", 1], ["lot", "Lot", "l", s => LOTS_S[s.lot]], ["np074", "NP 074-2022", "l"], ["code", "14688-2:2018", "l"]]],
   ["Granulometrie", [["A", "Argilă %", 0, 1], ["P", "Praf %", 0, 1], ["N", "Nisip %", 0, 1], ["Pi", "Pietriș %", 0, 1]]],
   ["Plasticitate", [["w", "w %", 1, 1], ["wL", "wL %", 1, 1], ["wP", "wP %", 1, 1], ["IP", "IP %", 1, 1], ["IC", "IC", 2], ["cons", "Stare", "l"], ["IA", "IA", 2]]],
   ["Indici fizici", [["g", "γ", 2], ["gd", "γd", 2], ["gsat", "γsat", 2], ["n", "n %", 1, 1], ["e", "e", 3], ["Sr", "Sr", 2]]],
@@ -928,6 +1027,7 @@ $("#sh-play").onclick = () => { const el = $("#p-shear"); if (el._full) drawIn(e
 $("#np-group").onchange = e => { np.group = e.target.value; np.unit = null; renderNp(); };
 $("#np-z0").onchange = e => { np.z0 = +e.target.value || 0; renderNp(); };
 $("#np-z1").onchange = e => { np.z1 = +e.target.value || 6; renderNp(); };
+$("#tern-zoom").onclick = ternZoom;
 $("#np-copy").onclick = () => copy(npTSV());
 $("#dt-copy").onclick = () => copy(dtTSV());
 $("#dt-search").oninput = renderDate;
